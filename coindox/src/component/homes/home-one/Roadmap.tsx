@@ -11,13 +11,13 @@ interface DataType {
 const roadmap_data: DataType[] = [
    {
       id: 1,
-      title: (<>Stage 1 <br /> Q1 - 2023</>),
-      list: ["Ideation", "Proof of Concept", "Business Deck", "Security Audit", "Token on BEP 20"],
+      title: (<>Stage 1 <br /> Hackathon MVP</>),
+      list: ["Ideation", "Proof of Concept", "Calculating Tax based on received Crypto","Crypto Tax sent to seperate 'Tax Wallet'"],
    },
    {
       id: 2,
-      title: (<>Stage 2 <br /> Q2 - 2023</>),
-      list: ["Mainnet Launch", "Smart Contract Upgrade", "Cross-Chain Interoperability", "Governance Model Implementation", "Whitepaper Release"],
+      title: (<>Stage 2 <br /> Q2 - 2025</>),
+      list: ["Liquidity Pool", "Staking of 'Tax Wallet'", "Cross-Chain Interoperability", "Governance Model Implementation", "Whitepaper Release"],
    },
    {
       id: 3,

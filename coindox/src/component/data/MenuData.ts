@@ -24,16 +24,16 @@ const menu_data: MenuItem[] = [
     {
         id: 1,
         page: "home_1",
-        has_dropdown: true,
+        has_dropdown: false,
         title: "Home",
         link: "#",
-        mega_menu: true,
-        sub_menus: [
+        mega_menu: false,
+        /*sub_menus: [
             { link: "/", title: "Blockchain", demo_pic: demo_1 },
             { link: "/home-two", title: "Bitcoin Mining", demo_pic: demo_2 },
             { link: "/home-three", title: "ICO", demo_pic: demo_3 },
             { link: "#", title: "Coming Soon", demo_pic: demo_4 },
-        ],
+        ], */
     },
     {
         id: 2,
@@ -42,13 +42,13 @@ const menu_data: MenuItem[] = [
         title: "Feature",
         link: "/#feature",
     },
-    {
+    /*{
         id: 3,
         page: "home_1",
         has_dropdown: false,
         title: "Team",
         link: "/#team",
-    },
+    },*/
     {
         id: 4,
         page: "home_1",
@@ -56,7 +56,7 @@ const menu_data: MenuItem[] = [
         title: "Roadmap",
         link: "/#roadmap",
     },
-    {
+    /*{
         id: 5,
         page: "home_1",
         has_dropdown: true,
@@ -66,15 +66,15 @@ const menu_data: MenuItem[] = [
             { link: "/blog", title: "Blog" },
             { link: "/blog-details", title: "Blog Details", },
         ],
-    },
-    {
+    },*/
+    /*{
         id: 6,
         page: "home_1",
         has_dropdown: false,
         title: "Contact",
         link: "/contact",
-    },
-
+    },*/
+/*
     // home_2
 
     {
@@ -184,5 +184,7 @@ const menu_data: MenuItem[] = [
         title: "Contact",
         link: "/contact",
     },
+*/
 ];
+
 export default menu_data;

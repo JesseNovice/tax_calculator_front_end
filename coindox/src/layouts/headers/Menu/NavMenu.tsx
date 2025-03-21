@@ -33,6 +33,7 @@ const NavMenu = () => {
                                     <li>
                                         <div className="mega-menu-content mxw_1505">
                                             <div className="row">
+                                                {/*
                                                 {menu.sub_menus.map((sub_m: any, i: any) => (
                                                     <div key={i} className="col col-md-3">
                                                         <div className="demo-pic">
@@ -40,9 +41,9 @@ const NavMenu = () => {
                                                                 <Image src={sub_m.demo_pic} alt="" />
                                                             </Link>
                                                         </div>
-                                                        <h3>{sub_m.title}</h3>
+                                                        <h3>{sub_m.title}</h3> 
                                                     </div>
-                                                ))}
+                                                ))} */}
                                             </div>
                                         </div>
                                     </li>

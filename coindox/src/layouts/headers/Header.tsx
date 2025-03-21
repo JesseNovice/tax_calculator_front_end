@@ -7,6 +7,7 @@ import Sidebar from "./Menu/Sidebar";
 import UseSticky from "@/component/hooks/UseSticky";
 
 import logo_1 from "@/assets/img/logo/logo-2.svg";
+import logo_4 from "@/assets/img/logo/testlogo.png"
 import flag_1 from "@/assets/img/icon/chn_flag.png"
 import flag_2 from "@/assets/img/icon/rsa_flag.png"
 import flag_3 from "@/assets/img/icon/in_flag.png"
@@ -23,8 +24,8 @@ const Header = () => {
                     <div className="container-fluid">
                         <div className="header__main ul_li_between">
                             <div className="header__left ul_li">
-                                <div className="header__logo">
-                                    <Link href="/"><Image src={logo_1} alt="" /></Link>
+                                <div className="header__logo w-12 h-12">
+                                    <Link href="/"><Image src={logo_1} width={200} height={200} alt="test" /></Link>
                                 </div>
                             </div>
                             <div className="main-menu__wrap ul_li navbar navbar-expand-lg">

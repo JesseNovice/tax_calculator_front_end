@@ -2,7 +2,7 @@ import HomeOne from "@/component/homes/home-one";
 import Wrapper from "@/layouts/Wrapper";
 
 export const metadata = {
-  title: "Coindox - ICO & Crypto Landing React Next js Template",
+  title: "Tax Calculator",
 };
 const index = () => {
   return (

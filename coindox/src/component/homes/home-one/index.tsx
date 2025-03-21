@@ -20,16 +20,9 @@ const HomeOne = () => {
         <Header />
         <Hero />
         <UserOption />
-        <About />
-        <Advantages />
-        <Solution />
-        <TokenUpdate />
-        <Token />
-        <Team />
-        <Distribution />
+        {/*<Solution />
+        <Token /> */}
         <Roadmap />
-        <FaqArea />
-        <Brand />
         <FooterOne />
       </div>
     </div>

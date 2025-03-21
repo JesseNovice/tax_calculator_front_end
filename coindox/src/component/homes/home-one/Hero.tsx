@@ -10,9 +10,9 @@ const Hero = () => {
             <div className="row align-items-center">
                <div className="col-lg-7">
                   <div className="blockchain-hero__content">
-                     <h1 className="title text-80 mb-35 -tracking-2/4">Navigating the world <br /> of blockchain</h1>
+                     <h1 className="title text-80 mb-35 -tracking-2/4">Creating Manageable and Automated Tax calculations and withdrawls <br /></h1>
 
-                     <p className="mb-50 text-20 leading-30">In our digital world, trust, security, and efficiency are vital. Enter blockchain <br /> technology, the game-changer.</p>
+                     <p className="mb-50 text-20 leading-30">Accountant? Tax Adviser? Lawyer?<br /> CoinClear.</p>
                      <div className="btns">
                         <Link className="blc-btn" href="#!">get started</Link>
                         <Link className="blc-btn blc-btn--white" href="#!">white paper</Link>
