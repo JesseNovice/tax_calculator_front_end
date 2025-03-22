@@ -351,11 +351,13 @@ const styles = {
     padding: "8px",
     backgroundColor: "#f2f2f2",
   },
-  tableCell: {
-    border: "1px solid #ddd",
-    padding: "8px",
-    wordBreak: "break-word" as const,
-  },
+tableCell: {
+  border: "1px solid #ddd",
+  padding: "8px",
+  wordBreak: "break-word" as const,
+  color: "#000", // Make text clearly readable
+  fontWeight: 500, // Optional: make it bolder
+},
   submitButton: {
     marginTop: "20px",
     padding: "10px 20px",
