@@ -41,7 +41,7 @@ const user_option_data: DataType[] = [
 ]
 const UserOption = () => {
    return (
-      <section className="user-option pb-110">
+      <section id="feature" className="user-option pb-110">
          <div className="container">
             <div className="sec-title style2 text-center mb-20">
                <h2 className="sec-title__title text-50 mb-25">Subscription Options </h2>
