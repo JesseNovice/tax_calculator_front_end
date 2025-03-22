@@ -126,7 +126,7 @@ const Solution: React.FC = () => {
       <button onClick={addWalletField} style={styles.addButton}>
         Add Another Wallet
       </button>
-
+      <div>Output</div>
       {csvData.length > 0 && (
         <div style={styles.tableContainer}>
           <table style={styles.table}>
