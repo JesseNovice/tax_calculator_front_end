@@ -1,7 +1,9 @@
 "use client"
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import { ethers } from "ethers";
+
 import NavMenu from "./Menu/NavMenu";
 import Sidebar from "./Menu/Sidebar";
 import UseSticky from "@/component/hooks/UseSticky";
@@ -13,9 +15,28 @@ import flag_2 from "@/assets/img/icon/rsa_flag.png"
 import flag_3 from "@/assets/img/icon/in_flag.png"
 
 const Header = () => {
-
     const { sticky } = UseSticky();
     const [isActive, setIsActive] = useState<boolean>(false);
+    const [walletAddress, setWalletAddress] = useState<string>("");
+
+    const connectWallet = async () => {
+        if (typeof window.ethereum !== "undefined") {
+            try {
+                const provider = new ethers.BrowserProvider(window.ethereum);
+                const accounts = await provider.send("eth_requestAccounts", []);
+                const address = accounts[0];
+                setWalletAddress(address);
+            } catch (err) {
+                console.error("User denied wallet connection", err);
+            }
+        } else {
+            alert("Please install MetaMask to connect your wallet.");
+        }
+    };
+
+    const getShortAddress = (addr: string) => {
+        return `${addr.substring(0, 6)}...${addr.substring(addr.length - 4)}`;
+    };
 
     return (
         <>
@@ -61,7 +82,13 @@ const Header = () => {
                                     </div>
                                 </div>
                                 <div className="blockchain-header__account">
-                                    <Link className="blc-btn" href="/login"><span><i className="fas fa-user"></i>LOGIN</span></Link>
+                                    {walletAddress ? (
+                                        <span className="blc-btn"><i className="fas fa-wallet"></i>{getShortAddress(walletAddress)}</span>
+                                    ) : (
+                                        <button className="blc-btn" onClick={connectWallet}>
+                                            <span><i className="fas fa-wallet"></i>Connect Wallet</span>
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -71,6 +98,6 @@ const Header = () => {
             <Sidebar isActive={isActive} setIsActive={setIsActive} Sidebar="slide-bar-blockchain" />
         </>
     );
-}
+};
 
 export default Header;
