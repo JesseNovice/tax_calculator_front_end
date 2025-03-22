@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Papa from "papaparse";
 import { getVaultContract } from "../../../../web3 constants/web3 constants";
 import { ethers } from "ethers";
@@ -22,10 +22,35 @@ type TransactionRow = {
 
 const Solution: React.FC = () => {
   const [csvData, setCsvData] = useState<CsvRow[]>([]);
-  const [wallets, setWallets] = useState<WalletEntry[]>([{ address: "", isActive: true }]);
+  const [walletAddress, setWalletAddress] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
   const [transactionData, setTransactionData] = useState<TransactionRow[]>([]);
   const [view, setView] = useState<"input" | "results">("input");
+
+  // Connect to MetaMask and get wallet address
+  const connectWallet = async () => {
+    if (!window.ethereum) {
+      alert("MetaMask is not installed");
+      return;
+    }
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = await provider.getSigner();
+      const address = await signer.getAddress();
+      setWalletAddress(address);
+    } catch (err) {
+      console.error("Failed to connect wallet:", err);
+      alert("Failed to connect wallet");
+    }
+  };
+
+  // Auto-connect on mount if MetaMask is available
+  useEffect(() => {
+    if (window.ethereum) {
+      connectWallet();
+    }
+  }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -50,40 +75,13 @@ const Solution: React.FC = () => {
     });
   };
 
-  const handleWalletChange = (index: number, value: string) => {
-    const newWallets = [...wallets];
-    newWallets[index].address = value;
-    setWallets(newWallets);
-  };
-
-  const handleCheckboxChange = (index: number) => {
-    const newWallets = [...wallets];
-    newWallets[index].isActive = !newWallets[index].isActive;
-    setWallets(newWallets);
-  };
-
-  const addWalletField = () => {
-    setWallets([...wallets, { address: "", isActive: true }]);
-  };
-
-  const removeWalletField = (index: number) => {
-    if (wallets.length > 1) {
-      setWallets(wallets.filter((_, i) => i !== index));
-    }
-  };
-
   const handleSubmit = () => {
-    const activeWallets = wallets.filter(wallet => wallet.isActive).map(wallet => wallet.address.trim());
-    if (activeWallets.length === 0) {
-      alert("Please add at least one active wallet address.");
-      return;
-    }
-    if (activeWallets.some(address => address === "")) {
-      alert("Please enter all active wallet addresses.");
+    if (!walletAddress) {
+      alert("Please connect your wallet.");
       return;
     }
 
-    const mockTransactions: TransactionRow[] = activeWallets.map((address, index) => ({
+    const mockTransactions: TransactionRow[] = [walletAddress].map((address, index) => ({
       transactionHash: `0x${Math.random().toString(16).slice(2, 10)}...${index}`,
       profit: `${(Math.random() * 1000).toFixed(2)} NZD`,
       taxesDue: `${(Math.random() * 200).toFixed(2)} NZD`,
@@ -91,7 +89,7 @@ const Solution: React.FC = () => {
 
     setTransactionData(mockTransactions);
     setView("results");
-    console.log("Submitted Data:", { csvData, activeWallets, transactionData: mockTransactions });
+    console.log("Submitted Data:", { csvData, walletAddress, transactionData: mockTransactions });
   };
 
   const handleBack = () => {
@@ -127,41 +125,19 @@ const Solution: React.FC = () => {
           {fileName && <p style={styles.fileName}>Uploaded file: {fileName}</p>}
 
           <h3 style={styles.subHeading}>Enter Crypto Wallet Addresses</h3>
-          {wallets.map((wallet, index) => (
-            <div key={index} style={styles.walletRow}>
-              <label style={styles.label} htmlFor={`wallet-${index}`}>
-                Wallet {index + 1}:
-              </label>
-              <input
-                type="checkbox"
-                checked={wallet.isActive}
-                onChange={() => handleCheckboxChange(index)}
-                style={styles.checkbox}
-                aria-label={`Toggle active for wallet ${index + 1}`}
-              />
-              <input
-                type="text"
-                id={`wallet-${index}`}
-                value={wallet.address}
-                onChange={(e) => handleWalletChange(index, e.target.value)}
-                placeholder="e.g., 0x1234...abcd"
-                style={{
-                  ...styles.walletInput,
-                  backgroundColor: wallet.isActive ? "#fff" : "#d3d3d3",
-                  color: "#000",
-                }}
-                disabled={!wallet.isActive}
-              />
-              {wallets.length > 1 && (
-                <button onClick={() => removeWalletField(index)} style={styles.removeButton}>
-                  ×
-                </button>
-              )}
-            </div>
-          ))}
-          <button onClick={addWalletField} style={styles.addButton}>
-            Add Another Wallet
-          </button>
+          <div style={styles.walletRow}>
+            <label style={styles.label}>
+              Wallet 1:
+            </label>
+            <p style={styles.walletDisplay}>
+              {walletAddress ? walletAddress : "Not Connected"}
+            </p>
+            {!walletAddress && (
+              <button onClick={connectWallet} style={styles.connectButton}>
+                Connect Wallet
+              </button>
+            )}
+          </div>
 
           {csvData.length > 0 && (
             <div style={styles.tableContainer}>
@@ -254,9 +230,9 @@ const styles = {
     flexDirection: "column" as const,
     alignItems: "center",
     justifyContent: "center",
-    minHeight: "100vh",
+    maxwidth: "300px",
+    maxheight: "auto",
     textAlign: "center" as const,
-    backgroundImage: "url('/assets/img/shape/s_circle_4.png')",
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
@@ -375,6 +351,26 @@ const styles = {
     borderRadius: "4px",
     cursor: "pointer",
     fontSize: "16px",
+  },
+  walletDisplay: {
+    padding: "8px",
+    width: "300px",
+    maxWidth: "90%",
+    border: "1px solid #ddd",
+    borderRadius: "4px",
+    marginLeft: "10px",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    color: "#000",
+    fontSize: "16px",
+  },
+  connectButton: {
+    marginLeft: "10px",
+    padding: "8px 16px",
+    backgroundColor: "#4CAF50",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
   },
 };
 

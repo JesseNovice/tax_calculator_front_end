@@ -22,7 +22,7 @@ const HomeOne = () => {
         <UserOption />
         <Solution />
         {/*<Token /> */}
-        <Roadmap />
+        {/*<Roadmap />*/}
         <FooterOne />
       </div>
     </div>

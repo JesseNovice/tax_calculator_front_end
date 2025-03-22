@@ -24,7 +24,6 @@ const user_option_data: DataType[] = [
          { title: "Transactions", desc: "100 Transactions per Financial Year" },
          { title: "Automation", desc: "Nice profit! We'll handle the rest." },
          { title: "Vaulting", desc: "Taxes are vaulted with the option to stake using NZDD" },
-         { title: "Testing and proactive communication", desc: "Testing and proactive communication are essential components of successful projects," },
       ],
    },
    {
@@ -33,9 +32,8 @@ const user_option_data: DataType[] = [
       icon: icon_2,
       list: [
          { title: "Transactions", desc: "Unlimited Transactions, buy baby buy!" },
-         { title: "Automation", desc: "idk" },
+         { title: "Automation", desc: "Auto Swap from Native Token to NZDD" },
          { title: "Vaulting", desc: "Multiple Vaulting Options, different staking timeframes" },
-         { title: "Startups for blockchain", desc: "Startups in the blockchain industry have been flourishing in recent years, leveraging." },
       ],
    },
 ]
