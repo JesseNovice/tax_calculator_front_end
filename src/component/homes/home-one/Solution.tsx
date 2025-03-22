@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Papa from "papaparse";
-import { getVaultContract } from "../../../../../web3 constants/web3 constants";
+import { getVaultContract } from "../../../../web3 constants/web3 constants";
 import { ethers } from "ethers";
 import { Eip1193Provider } from "ethers";
 
