@@ -331,6 +331,7 @@ const styles = {
     border: "1px solid #ddd",
     padding: "8px",
     wordBreak: "break-word" as const,
+    color: "black",
   },
   submitButton: {
     marginTop: "20px",

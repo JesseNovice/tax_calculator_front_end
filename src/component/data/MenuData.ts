@@ -35,27 +35,13 @@ const menu_data: MenuItem[] = [
             { link: "#", title: "Coming Soon", demo_pic: demo_4 },
         ], */
     },
-    {
-        id: 2,
-        page: "home_1",
-        has_dropdown: false,
-        title: "Feature",
-        link: "/#feature",
-    },
     /*{
         id: 3,
         page: "home_1",
         has_dropdown: false,
-        title: "Team",
-        link: "/#team",
+        title: "Subscriptions",
+        link: "/#feature",
     },*/
-    {
-        id: 4,
-        page: "home_1",
-        has_dropdown: false,
-        title: "Roadmap",
-        link: "/#roadmap",
-    },
     /*{
         id: 5,
         page: "home_1",
