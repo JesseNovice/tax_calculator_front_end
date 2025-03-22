@@ -19,7 +19,13 @@ const FooterOne = () => {
                   </form>
                </div>
             </div>
-            <div className="row mt-none-30 pb-70">
+         </div>
+      </footer>
+   )
+}
+
+export default FooterOne
+            {/*<div className="row mt-none-30 pb-70">
                <div className="col-lg-4 col-md-6 col-sm-6 mt-30">
                   <div className="footer__widget">
                      <div className="footer__widget-community text-center">
@@ -81,4 +87,4 @@ const FooterOne = () => {
    )
 }
 
-export default FooterOne
+export default FooterOne*/}

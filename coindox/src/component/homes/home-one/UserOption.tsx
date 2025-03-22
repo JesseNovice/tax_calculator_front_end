@@ -45,7 +45,7 @@ const UserOption = () => {
          <div className="container">
             <div className="sec-title style2 text-center mb-20">
                <h2 className="sec-title__title text-50 mb-25">A Convenient App with a Subscription Model for all user types </h2>
-               <p>We offer tow types of account on the platform</p>
+               <p>BLANK</p>
             </div>
             <div className="row align-items-center">
                {user_option_data.slice(0, 1).map((item => (
