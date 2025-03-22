@@ -2,17 +2,18 @@
 
 import React, { useState } from "react";
 import Papa from "papaparse";
+import { getVaultContract } from "../../../../../web3 constants/web3 constants";
+import { ethers } from "ethers";
+import { Eip1193Provider } from "ethers";
 
-// Define the type for a row of CSV data
+declare global {
+  interface Window {
+    ethereum?: Eip1193Provider;
+  }
+}
+
 type CsvRow = { [key: string]: string };
-
-// Define type for wallet entry
-type WalletEntry = {
-  address: string;
-  isActive: boolean;
-};
-
-// Define type for the submitted table row
+type WalletEntry = { address: string; isActive: boolean };
 type TransactionRow = {
   transactionHash: string;
   profit: string;
@@ -20,14 +21,12 @@ type TransactionRow = {
 };
 
 const Solution: React.FC = () => {
-  // State declarations
   const [csvData, setCsvData] = useState<CsvRow[]>([]);
   const [wallets, setWallets] = useState<WalletEntry[]>([{ address: "", isActive: true }]);
   const [fileName, setFileName] = useState<string>("");
   const [transactionData, setTransactionData] = useState<TransactionRow[]>([]);
-  const [view, setView] = useState<"input" | "results">("input"); // Toggle between input and results
+  const [view, setView] = useState<"input" | "results">("input");
 
-  // Handle CSV file upload
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.name.endsWith(".csv")) {
@@ -38,7 +37,6 @@ const Solution: React.FC = () => {
     }
   };
 
-  // Parse CSV file with error handling
   const readCSV = (file: File) => {
     Papa.parse(file, {
       complete: (result) => {
@@ -52,33 +50,28 @@ const Solution: React.FC = () => {
     });
   };
 
-  // Update wallet address
   const handleWalletChange = (index: number, value: string) => {
     const newWallets = [...wallets];
     newWallets[index].address = value;
     setWallets(newWallets);
   };
 
-  // Toggle wallet active state
   const handleCheckboxChange = (index: number) => {
     const newWallets = [...wallets];
     newWallets[index].isActive = !newWallets[index].isActive;
     setWallets(newWallets);
   };
 
-  // Add a new wallet field
   const addWalletField = () => {
     setWallets([...wallets, { address: "", isActive: true }]);
   };
 
-  // Remove a wallet field if more than one exists
   const removeWalletField = (index: number) => {
     if (wallets.length > 1) {
       setWallets(wallets.filter((_, i) => i !== index));
     }
   };
 
-  // Handle form submission with validation and table generation
   const handleSubmit = () => {
     const activeWallets = wallets.filter(wallet => wallet.isActive).map(wallet => wallet.address.trim());
     if (activeWallets.length === 0) {
@@ -90,21 +83,39 @@ const Solution: React.FC = () => {
       return;
     }
 
-    // Mock data generation for the new table
     const mockTransactions: TransactionRow[] = activeWallets.map((address, index) => ({
       transactionHash: `0x${Math.random().toString(16).slice(2, 10)}...${index}`,
-      profit: `${(Math.random() * 1000).toFixed(2)} USD`,
-      taxesDue: `${(Math.random() * 200).toFixed(2)} USD`,
+      profit: `${(Math.random() * 1000).toFixed(2)} NZD`,
+      taxesDue: `${(Math.random() * 200).toFixed(2)} NZD`,
     }));
 
     setTransactionData(mockTransactions);
-    setView("results"); // Switch to results view
+    setView("results");
     console.log("Submitted Data:", { csvData, activeWallets, transactionData: mockTransactions });
   };
 
-  // Handle going back to input view
   const handleBack = () => {
     setView("input");
+  };
+
+  const handlepay = async (_amount: string) => {
+    if (!window.ethereum) {
+      alert("MetaMask is not installed");
+      return;
+    }
+
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = await getVaultContract(signer);
+      const parsedAmount = ethers.parseUnits(_amount, 6);
+      const tx = await contract.deposit(parsedAmount);
+      await tx.wait();
+      alert(`Payment successful! TX hash: ${tx.hash}`);
+    } catch (err) {
+      console.error(err);
+      alert("Payment failed");
+    }
   };
 
   return (
@@ -136,8 +147,8 @@ const Solution: React.FC = () => {
                 placeholder="e.g., 0x1234...abcd"
                 style={{
                   ...styles.walletInput,
-                  backgroundColor: wallet.isActive ? "#fff" : "#d3d3d3", // Less transparent, solid background
-                  color: "#000", // Black text for high contrast
+                  backgroundColor: wallet.isActive ? "#fff" : "#d3d3d3",
+                  color: "#000",
                 }}
                 disabled={!wallet.isActive}
               />
@@ -152,7 +163,6 @@ const Solution: React.FC = () => {
             Add Another Wallet
           </button>
 
-          {/* CSV Data Table */}
           {csvData.length > 0 && (
             <div style={styles.tableContainer}>
               <h3 style={styles.subHeading}>CSV Data</h3>
@@ -187,7 +197,6 @@ const Solution: React.FC = () => {
         </>
       ) : (
         <>
-          {/* Transaction Data Table */}
           {transactionData.length > 0 && (
             <div style={styles.fullWidthTableContainer}>
               <h3 style={styles.subHeading}>Transaction Summary</h3>
@@ -197,6 +206,7 @@ const Solution: React.FC = () => {
                     <th style={styles.tableHeader}>Transaction Hash</th>
                     <th style={styles.tableHeader}>Profit</th>
                     <th style={styles.tableHeader}>Taxes Due</th>
+                    <th style={styles.tableHeader}>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -205,6 +215,24 @@ const Solution: React.FC = () => {
                       <td style={styles.tableCell}>{row.transactionHash}</td>
                       <td style={styles.tableCell}>{row.profit}</td>
                       <td style={styles.tableCell}>{row.taxesDue}</td>
+                      <td style={styles.tableCell}>
+                        <button
+                          onClick={() => {
+                            const taxOnly = parseFloat(row.taxesDue.replace(/[^\d.-]/g, ""));
+                            handlepay(taxOnly.toString());
+                          }}
+                          style={{
+                            padding: "6px 12px",
+                            backgroundColor: "#28a745",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Pay Tax
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -220,7 +248,6 @@ const Solution: React.FC = () => {
   );
 };
 
-// Styles object with enhancements
 const styles = {
   container: {
     display: "flex",
@@ -234,7 +261,7 @@ const styles = {
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     padding: "20px",
-    width: "100%", // Ensure container spans full width
+    width: "100%",
   },
   heading: {
     marginBottom: "20px",
@@ -264,9 +291,9 @@ const styles = {
     border: "1px solid #ddd",
     borderRadius: "4px",
     marginLeft: "10px",
-    backgroundColor: "rgba(255, 255, 255, 0.9)", // Semi-transparent white
-    color: "#000", // Black text for visibility
-    fontSize: "16px", // Ensure readable size
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    color: "#000",
+    fontSize: "16px",
   },
   checkbox: {
     marginRight: "10px",
