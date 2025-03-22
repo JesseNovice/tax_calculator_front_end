@@ -230,7 +230,7 @@ const Solution: React.FC = () => {
                             cursor: "pointer",
                           }}
                         >
-                          Pay Tax
+                          Send To The Tax Vault
                         </button>
                       </td>
                     </tr>
