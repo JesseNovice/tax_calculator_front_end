@@ -350,6 +350,7 @@ const styles = {
     border: "1px solid #ddd",
     padding: "8px",
     backgroundColor: "#f2f2f2",
+     color: "#000", // Make text clearly readable
   },
 tableCell: {
   border: "1px solid #ddd",
